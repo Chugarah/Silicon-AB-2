@@ -1,0 +1,288 @@
+@use "sass:map";
+@use "sass:meta";
+/// Importing Colors
+@use "_colors" as c;
+
+// =============================================================================
+// Fonts
+// =============================================================================
+/* https://sass-lang.com/documentation/style-rules/declarations/ */
+
+/// Font-Awesome
+/// Look at your Web pack configuration, I am using Vite
+/// Look in Vite ALias where @fortawesome is point to.
+$font-awesome-icon-size: (
+  /// 10px
+  "fa-2xs": 0.625em,
+  /// 12px
+  "fa-xs": 0.75em,
+  /// 14px
+  "fa-sm": 0.875em,
+  /// 20px
+  "fa-lg": 1.25em,
+  /// 24px
+  "fa-xl": 1.5em,
+  /// 32px
+  "fa-2xl": 2em
+);
+
+/// Manrope
+/// Need other fonts from Fontsource
+/// npm install @fontsource/manrope
+
+$font-family: "Manrope", sans-serif;
+
+$font-primary-style: normal;
+$font-optical-sizing: auto;
+$font-weight: (
+  "ExtraLight": 200,
+  "Light": 300,
+  "Regular": 400,
+  "Medium": 500,
+  "SemiBold": 600,
+  "Bold": 700,
+  "ExtraBold": 800,
+  "ExtremeBold": 900,
+);
+
+/// Font-Awesome
+$font-family-font-awesome: "Font Awesome 6 Free";
+$font-awesome-src: (
+  "fa-regular-400-woff2": "@assets/fonts/Font-Awesome/fa-regular-400.woff2",
+  "fa-regular-400-ttf": "@assets/fonts/Font-Awesome/fa-regular-400.ttf",
+  "fa-solid-900-woff2": "@assets/fonts/Font-Awesome/fa-solid-900.woff2",
+  "fa-solid-900-ttf": "@assets/fonts/Font-Awesome/fa-solid-900.ttf",
+  "fa-brands-400-woff2": "@assets/fonts/Font-Awesome/fa-brands-400.woff2",
+  "fa-brands-400-ttf": "@assets/fonts/Font-Awesome/fa-brands-400.ttf",
+);
+
+// =============================================================================
+// Layout
+// =============================================================================
+
+/// @name content-width-percentage
+/// @group Utilities
+/// Description of the variable
+/// @type number
+/// @access public
+/// @example code-scss
+///   .element {
+///      width: map.get($map: $content-width, $key: 'full-width');
+///   }
+$content-width-percentage: (
+  "full-width": 100%,
+  "half-width": 50%,
+);
+
+/// @name display-type
+/// Map of display types for consistent usage across the project
+/// @type Map
+/// @group Layout
+/// @access public
+/// @example code-scss
+///   .element {
+///      display: map.get($map: $display-type, $key: 'flex');
+///   }
+$display-type: (
+  "flex": flex,
+  "grid": grid,
+  "none": none,
+);
+
+/// @name breakpoints
+/// Map of breakpoints regarding responsive
+/// @type Map
+/// @group Layout
+/// @example code-scss
+///   .element {
+///     media (min-width: display: map.get($map: $breakpoints, $key: 'medium')){
+///         background-color: red;
+///     }
+$breakpoints: (
+  "mobile": 390px,
+  "small": 500px,
+  "medium": 768px,
+  "xlarge": 1200px,
+  "xlarge-1": 1299px,
+  "xlarge-2": 1340px,
+  "xlarge-3": 1420px,
+);
+
+/// @name max-content
+/// Max content width values depending on device
+/// @type Map
+/// @group Layout
+/// @example code-scss
+///   .element {
+///     max-width: map.get($map: $max-content-width, $key: 'desktop');
+///   }
+$max-content-width: (
+  "desktop": 81.25rem,
+  "tablet": 48rem,
+  "mobile": 24.375rem,
+);
+
+/// @name spacing-distance-relative
+/// Maps for different gaps size based on the layout
+/// This is relative to the parent container
+/// @type Map
+/// @group Layout
+/// @example code-scss
+///   .element {
+///     gap: map.get($map: $spacing-distance-relative, $key: 's-0-15');
+///   }
+$spacing-distance-relfative: (
+  /// 2px
+  "s-0-12": 0.125em,
+  /// 8px
+  "s-0-15": 0.5em,
+  /// 9px
+  "s-0-56": 0.5625em,
+  /// 10px
+  "s-0-62": 0.625em,
+  /// 16px
+  "s-1-1": 1em,
+  /// 17px
+  "s-1-06": 1.0625em,
+  /// 20px
+  "s-1-25": 1.25em,
+  /// 22px
+  "s-1-37": 1.375em,
+  /// 24px
+  "s-1-50": 1.5em,
+  /// 28px
+  "s-1-75": 1.75em,
+  /// 30px
+  "s-1-87": 1.875em,
+  /// 32px
+  "s-2-00": 2em,
+  /// 36px
+  "s-2-25": 2.25em,
+  /// 40px
+  "s-2-50": 2.5em,
+  /// 48px
+  "s-3-00": 3rem,
+  /// 43px
+  "s-2-68": 2.6875em,
+  /// 44px
+  "s-2-75": 2.75em,
+  /// 50px
+  "s-3-31": 3.125em,
+  /// 55px
+  "s-3-43": 3.4375em,
+  /// 56px
+  "s-3-50": 3.5em,
+  /// 75px
+  "s-4-68": 4.6875em,
+  /// 90px
+  "s-5-62": 5.625em,
+  /// 100px
+  "s-6-25": 6.25em,
+  /// 130px
+  "s-8-12": 8.125em,
+  /// 133px
+  "s-8-31": 8.3125em,
+  /// 150px
+  "s-9-37": 9.375em,
+  /// 416px
+  "s-26-00": 26em
+);
+
+/// @name spacing-distance-relative
+/// Maps for different gaps size based on the layout
+/// @type Map
+/// @group Layout
+/// @example code-scss
+///   .element {
+///     gap: map.get($map: $spacing-distance, $key: 'sb-0-15');
+///   }
+$spacing-distance-base: (
+  "sb-0-18": 0.1875rem,
+  /// 10px
+  "sb-0-62": 0.625rem,
+  /// 16px
+  "sb-1-1": 1rem,
+  /// 20px
+  "sb-1-25": 1.25rem,
+  "sb-1-50": 1.5rem,
+  "sb-1-87": 1.875em,
+  /// 30px
+  "sb-2-18": 2.1875rem,
+  /// 35px
+  "sb-2-37": 2.375rem,
+  /// 38px
+  "sb-2-50": 2.5em,
+  /// 40px
+  "sb-3-00": 3rem,
+  /// 48px
+  "sb-3-31": 3.125rem,
+  // 50px
+  "sb-5-00": 5rem,
+  // 80px;
+);
+
+/// @name border-radius
+/// Border radius sizes :)
+/// @type Map
+/// @group Layout
+/// @example code-scss
+///   .element {
+///     border-radius: map.get($map: $border-radius, $key: 'p-2-2');
+///   }
+$border-radius: (
+  "r-0-2": 0.25em,
+  /// 6px
+  "r-0-3": 0.675em,
+  /// 8px
+  "r-0-5": 0.5em,
+  "r-2-2": 2.25em,
+);
+
+$dir: "\f078";
+$test: true;
+
+// =============================================================================
+// CSS Variables
+// =============================================================================
+
+:root {
+  /// =============================================================================
+  /// Base
+  /// =============================================================================
+
+  /// =============================================================================
+  /// Components
+  /// =============================================================================
+  /// Icon Settings
+  --icon-width: #{2.25rem};
+  --icon-height: #{2.25rem};
+  --fa-icon-width: #{map.get($map: $spacing-distance-base, $key: "sb-0-62")};
+  --fa-icon-height: #{map.get($map: $spacing-distance-base, $key: "sb-0-62")};
+  --fa-icon-bg-color: #{c.$grey-100};
+  --fa-icon-color: #{c.$grey-770};
+  --fa-icon-style-default: #{solid};
+  --icon-border-radius: #{50%};
+
+  /// Basvariabel för transition
+  --interactive-transition-base: 300ms;
+
+  // Hover state
+  --interactive-color-hover: #{c.$color-white};
+  --interactive-color-strength-hover: 15%;
+  --interactive-transition-hover: 400ms;
+  --interactive-bg-hover: #{c.$color-primary};
+
+  // Active state
+  --interactive-color-active: #{c.$color-white};
+  --interactive-color-strength-active: 10%;
+  --interactive-transition-active: 200ms;
+  --interactive-bg-active: #{c.$grey-600};
+
+  // Focus-visible state
+  --interactive-color-focus-visible: #{c.$color-white};
+  --interactive--color-strength-focus-visible: 7%;
+  --interactive-transition-focus-visible: 200ms;
+  --interactive-bg-focus-visible: #{c.$grey-600};
+
+  --theme-color: #ffffff;
+}

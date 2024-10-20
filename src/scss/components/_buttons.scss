@@ -1,0 +1,204 @@
+@use "sass:math";
+
+@use "@scss/abstracts" as a;
+@use "@scss/layout" as l;
+@use "@scss/components/_icons" as c;
+@use "@scss/base" as b;
+
+/// =============================================================================
+/// Primary Buttons
+/// =============================================================================
+
+/// Header Login button
+/// ============================================================================= /// Header Theme Button Access /// =============================================================================
+
+/// @name header__theme-btn-access /// @group Components /// /// Styles for the header theme button access component. /// /// @example scss /// .header__theme-btn-access { /// // Component styles /// } .header__theme-btn-access { /// @name btn-sign-in-up /// @group Components /// /// Styles for the sign-in/sign-up button within the header theme. /// /// @example scss /// .header__theme-btn-access__btn-sign-in-up { /// // Button styles /// } &__btn-sign-in-up { /// Basic Styling for BTN @include a.btn;
+
+/// @name user-icon
+/// @group Icons
+///
+/// Styles for the user icon within the sign-in/sign-up button.
+///
+/// @example code-scss
+///   .header__theme-btn-access__btn-sign-in-up__user-icon {
+///     // Icon styles
+///   }
+/// AI Phind Generated the Documentation above
+.header__theme-btn-access {
+  &__btn-sign-in-up {
+    /// Basic Styling for BTN
+    @include a.btn;
+
+    /// User Login Icon
+    &__user-icon {
+      /// Using Font-Awesome CSS selectors in SCSS :)))
+      @extend .fa-regular, .fa-user, .fa-regular-base, .fa-brand-base;
+      @include a.spacing-mixin(padding-right, "xs", em);
+    }
+
+    /// @name primary
+    /// @group Buttons
+    ///
+    /// Styles for the primary variant of the sign-in/sign-up button.
+    ///
+    /// @example code-scss
+    ///   .header__theme-btn-access__btn-sign-in-up--primary {
+    ///     // Primary button styles
+    ///   }
+    /// AI Phind Generated the Documentation above
+    /// Primary Btn specs
+    &--primary {
+      @include a.btn-props(
+        a.$color-white,
+        a.$color-primary,
+        map-get($map: a.$border-radius, $key: "r-0-2"),
+        a.create-list(0.5625em a.create-list(1.25em))
+      );
+
+      /// Adding hover state
+      /// Adding styles just because :D
+      --interactive-relative-hover: 4;
+      --interactive-transition-hover: 200;
+
+      @include a.interactive-states("&");
+    }
+  }
+}
+
+/// App Description Button
+.main-wrapper__app-description__container__section {
+  &__learn-more-btn {
+    /// Basic Styling for BTN
+    @include a.btn;
+
+    /// User Login Icon
+    &__arrow-icon {
+      /// Using Font-Awesome CSS selectors in SCSS :)))
+      @extend .fa-solid, .fa-arrow-right, .fa-solid-base;
+      padding-left: 0.875em;
+    }
+
+    /// Primary Btn specs
+    &--primary {
+      @include a.btn-props(
+        a.$color-white,
+        a.$color-primary,
+        map-get($map: a.$border-radius, $key: "r-0-3"),
+        a.create-list(1.25em a.create-list(2em))
+      );
+
+      /// Adding Hover States
+      @include a.interactive-states("&");
+    }
+  }
+}
+
+/// FAQ Button
+.main-wrapper__faq__container__faq-contact {
+  &__contact-us-now-btn {
+    /// Basic Styling for BTN
+    @include a.btn;
+
+    /// Primary Btn specs
+    &--primary {
+      @include a.btn-props(
+        a.$color-white,
+        a.$color-primary,
+        map-get($map: a.$border-radius, $key: "r-0-3"),
+        a.create-list(1.25em a.create-list(1.75em))
+      );
+
+      /// Adding hover state
+      @include a.interactive-states("&");
+    }
+  }
+}
+
+/// Subscribe
+.main-wrapper__subscribe__container__wrapper__flex__button {
+  /// Basic Styling for BTN
+  @include a.btn;
+
+  /// Primary Btn specs
+  &--primary {
+    @include a.btn-props(
+      a.$color-white,
+      a.$color-primary,
+      map-get($map: a.$border-radius, $key: "r-0-3"),
+      1.25em
+    );
+
+    /// Adding hover state
+    @include a.interactive-states("&");
+  }
+}
+
+/// =============================================================================
+/// Other Buttons
+/// =============================================================================
+.hero-section__apps-links__link-item {
+  background-color: a.theme-color(display-headings);
+
+  text-align: center;
+  display: inline-block;
+  position: relative;
+  border-radius: map-get($map: a.$border-radius, $key: "r-0-5");
+
+  width: 11.25em;
+  height: 3.25em;
+
+  &__android,
+  &__apple {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 75%;
+    height: 55%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    font-size: 0;
+    color: transparent;
+    pointer-events: none;
+  }
+
+  &__android {
+    background-image: var(--app-image-android);
+  }
+
+  &__apple {
+    background-image: var(--app-image-apple);
+  }
+
+  /// Desktop preparation for smaller devices
+  @include l.container-query(
+    header,
+    0,
+    map-get($map: a.$breakpoints, $key: "xlarge-1")
+  ) {
+    width: 70%;
+    height: 3.25em;
+  }
+
+  /// Tablets smaller laptops
+  @include l.container-query(
+    header,
+    0,
+    map-get($map: a.$breakpoints, $key: "medium")
+  ) {
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    &__apple,
+    &__android {
+      width: 75%;
+      height: 65%;
+    }
+  }
+
+  /// Adding Hover States
+  @include a.interactive-states("&");
+}

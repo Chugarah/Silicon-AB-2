@@ -1,0 +1,20 @@
+/// Tailwind imports
+@use "tailwindcss/base" as tw-base;
+@use "tailwindcss/components" as tw-components;
+@use "tailwindcss/utilities" as tw-utilities;
+
+/// https://gist.github.com/rveitch/84cea9650092119527bc
+
+/// https://sass-guidelin.es/#the-7-1-pattern */
+
+/// http://sassdoc.com/upgrading/ */
+
+/// @author Georgi Sundberg
+/// Main where we using 7-1 pattern, where using Use to include the place holder
+/// Got information from this video: https://www.youtube.com/watch?v=CR-a8upNjJ0&t=618s
+/// Continuation of the description on multiple lines if needed
+
+/// Abstracts, help files where it does not generate any CSS, variables
+/// functions and mixing's are stored here
+/// Continuation of the description on multiple lines if needed
+@use "@scss/abstracts";

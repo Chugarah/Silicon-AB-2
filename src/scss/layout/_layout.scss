@@ -1,0 +1,111 @@
+@use "sass:list";
+/// =============================================================================
+/// Layout
+/// =============================================================================
+
+/// @name container-query-wrapper
+/// @group Layout
+///
+/// Creates a container for container queries
+///
+/// This mixin sets up a container to be used with CSS Container Queries.
+/// It sets the container-type to inline-size and assigns a custom container-name.
+///
+/// @param {String} $container-name - The name of the container to be used in container queries
+///
+/// @example code-scss
+///   .my-component {
+///     @include container-query-wrapper('component-container');
+///   }
+///
+/// @example code-css
+///   .my-component {
+///     container-type: inline-size;
+///     container-name: component-container;
+///   }
+@mixin container-query-wrapper($container-name) {
+  container-type: inline-size;
+  container-name: $container-name;
+}
+
+/// @name content-width
+/// @group Layout
+///
+/// Setting max with of content element and also the with
+///
+/// @param {String} $max-width - Max width for the content
+/// @param {String} $width - With of the content
+/// @example code-scss
+///   @include content-width(81.25rem, 100%)
+/// }
+
+/// @name flex
+/// @group Layout
+///
+/// Telling it's flex and how to align it
+///
+/// @param {String} $max-width - Max width for the content
+/// @param {String} $width - With of the content
+/// @example code-scss
+///   @include content-width(81.25rem, 100%)
+/// }
+@mixin content-width($max-width, $width) {
+  max-width: $max-width;
+  margin: 0 auto;
+  width: $width;
+}
+
+/// @name flex
+/// @group Layout
+///
+/// Flex it!, hehe creating an flex container that has an optional parameter for direction
+/// good for responsive design
+///
+/// @param {String} $align-items - The name of the container to be used in container queries
+/// @param {String} $flex-direction - Min With of container size
+/// @example code-scss
+/// Phones
+/// @include flex(center);
+/// With directions
+/// @include flex(center, row)
+
+@mixin flex($align-items, $flex-direction: null) {
+  display: flex;
+  align-items: $align-items;
+
+  @if $flex-direction !=null {
+    flex-direction: $flex-direction;
+  }
+}
+
+/// @name container-query
+/// @group Layout
+///
+/// Container Query for responsive design, we check the with of container
+/// and sending the container further, got help also from Phind for the part
+/// where #{$max -1} to avoid clipping, layout changing i mid while going to
+/// next breakpoint
+///
+/// @param {String} $container-name - The name of the container to be used in container queries
+/// @param {String} $min - Min With of container size
+/// @param {String} $max - Max With of container size, this also could be null
+/// @example code-scss
+/// Phones
+///  @include a.container-query(header,0,map-get($map: $breakpoints, $key: 'medium')){
+///    .header-navigation{
+///      background-color: red;
+///    }
+///  }
+@mixin container-query($container-name, $min, $max: null) {
+  @if $max {
+    @container #{$container-name} (min-width: #{$min}) and (max-width: #{$max - 1}) {
+      /// Passing the content further
+      @content;
+    }
+  } @else if $min {
+    @container #{$container-name} (min-width: #{$min}) {
+      /// Passing the content further
+      @content;
+    }
+  }
+}

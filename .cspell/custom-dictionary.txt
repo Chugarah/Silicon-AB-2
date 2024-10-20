@@ -1,0 +1,7 @@
+# Custom Dictionary Words
+Behaviour
+fontawesome
+fontsource
+fortawesome
+relfative
+xlarge

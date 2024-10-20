@@ -1,0 +1,28 @@
+@use "sass:map";
+@use "@scss/base/_typography" as t;
+@use "@scss/abstracts/_themes" as th;
+
+html {
+  font-size: t.$core-font-size;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/// Theme Settings
+:root {
+  --logo-image: url("@assets/images/svg/logo.svg");
+  --app-image-android: url("@assets/images/svg/app-android-store-btn-group.svg");
+  --app-image-apple: url("@assets/images/svg/app-store-btn-group.svg");
+  @include th.generate-theme-vars(th.$light-theme);
+}
+
+.dark-theme {
+  --logo-image: url("@assets/images/svg/logo-dark.svg");
+  --app-image-android: url("@assets/images/svg/app-android-store-btn-group-dark.svg");
+  --app-image-apple: url("@assets/images/svg/app-apple-store-btn-group-dark.svg");
+  @include th.generate-theme-vars(th.$dark-theme);
+}

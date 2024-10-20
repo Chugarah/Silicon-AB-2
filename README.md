@@ -22,6 +22,11 @@ Innan du börjar, se till att du har följande installerat på din dator:
 - [Bun](https://bun.sh/) (som inkluderar npm)
 - [Git](https://git-scm.com/)
 
+## Buggar Gällande Paket
+
+FontAwesome Free
+<https://github.com/FortAwesome/Font-Awesome/issues/18908#issuecomment-1106315131>
+
 ## Licens
 
 MIT :)

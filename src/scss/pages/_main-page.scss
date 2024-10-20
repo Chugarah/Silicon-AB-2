@@ -1,0 +1,1921 @@
+@charset "UTF-8";
+
+@use "sass:map";
+@use "sass:meta";
+@use "@scss/base" as b;
+@use "@scss/abstracts" as a;
+@use "@scss/layout" as l;
+@use "@scss/components" as c;
+@use "@scss/vendors" as v;
+
+/*
+  https://www.youtube.com/watch?v=SLjHSVwXYq4
+  https://www.reddit.com/r/css/comments/14f9o5l/using_bem_in_2023/
+*/
+
+/// =============================================================================
+/// Pro Tip from Stackoverflow
+/// https://stackoverflow.com/questions/42660670/collapse-all-methods-in-visual-studio-code
+/// Collapse all methods in Visual Studio Code
+/// Fold All:
+/// Windows and Linux: Ctrl + K Ctrl + 0 (ZERO)
+/// Mac: ⌘ + K ⌘ + 0
+/// Unfold All:
+/// Windows and Linux: Ctrl + K Ctrl + J
+/// Mac: ⌘ + K ⌘ + J
+/// To see all available shortcuts in the editor:
+/// Windows and Linux: Ctrl + K Ctrl + S
+/// Mac: ⌘ + K ⌘ + S
+/// =============================================================================
+
+/// =============================================================================
+/// Variables
+/// =============================================================================
+/// Icon Variables
+
+/// =============================================================================
+/// Skeleton Structure
+/// =============================================================================
+/// @name skeleton-wrapper
+/// @group Layout
+///
+/// This is our core, an grid that has 3 rows and 1 colum. This is where we also
+/// We are using an mixin to create the grid and functions that create an list
+///
+.skeleton-wrapper {
+  @include l.grid-row-colum(
+    map-get($map: a.$display-type, $key: "grid"),
+    a.create-list(auto),
+    a.create-list(auto, 2fr, auto)
+  );
+
+  /// Basic Settings
+  & {
+    height: 100dvh;
+    margin: 0 auto;
+    /* https://sass-lang.com/documentation/style-rules/declarations/ */
+    font-family: #{meta.inspect(a.$font-family)};
+  }
+}
+
+/// =============================================================================
+/// Header & Navigation
+/// =============================================================================
+///
+/// Local variabel :D
+$_container-name-header: header;
+$_grid-max-width: 46.625rem;
+
+/// Setting Background color
+/// and sets the container name for container query /responsive
+.header_wrapper {
+  /// Activate Container Query Properties for header-wrapper
+  @include l.container-query-wrapper($_container-name-header);
+  /// Radial gradient background
+  /// Creates a subtle color transition from purple to pink to almost white
+  /// Background Gradient for Header and Promotion
+  background: radial-gradient(
+    125% 125% at 50% 110%,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(218, 70, 239, 0.05) 42%,
+    rgba(241, 244, 253, 0.07) 83%
+  );
+  background-color: a.theme-color(bg-color);
+}
+
+/// Setting Content Width and activating some basic responsive settings
+/// for header and hero areas
+.header,
+.hero-section {
+  /// Content Width
+  justify-content: space-between;
+  @include l.content-width(
+    map-get($map: a.$max-content-width, $key: "desktop"),
+    map-get($map: a.$content-width-percentage, $key: "full-width")
+  );
+
+  /// Tablets, Small Laptops
+  @include l.container-query(
+    $_container-name-header,
+    0,
+    map-get($map: a.$breakpoints, $key: "medium")
+  ) {
+    /// Content Width
+    @include l.content-width(
+      map-get($map: a.$max-content-width, $key: "tablet"),
+      map-get($map: a.$content-width-percentage, $key: "full-width")
+    );
+    justify-content: space-between;
+  }
+
+  /// Padding for header container
+  @include l.container-query(
+    $_container-name-header,
+    0,
+    map-get($map: a.$breakpoints, $key: "xlarge-2")
+  ) {
+    transition: all 200ms;
+    @include a.spacing-mixin(padding-left, "40px", em);
+    @include a.spacing-mixin(padding-right, "40px", em);
+  }
+
+  /// Mobile Phones :)
+  @include l.container-query(
+    $_container-name-header,
+    0,
+    map-get($map: a.$breakpoints, $key: "medium")
+  ) {
+    @include a.spacing-mixin(padding-left, "10px", em);
+    @include a.spacing-mixin(padding-right, "10px", em);
+  }
+}
+
+/// CSS regarding navigation and header, hero area not included
+.header {
+  /// Basic font, height and flex
+  font-weight: map-get($map: a.$font-weight, $key: "SemiBold");
+  display: map-get($map: a.$display-type, $key: "flex");
+  align-items: center;
+  height: 4.75rem;
+
+  /// Remove the spacing to mobile link, because the text Dark-mode is out of space
+  @include l.container-query(
+    $_container-name-header,
+    0,
+    map-get($map: a.$breakpoints, $key: "small")
+  ) {
+    @include a.spacing-mixin(padding-right, "sm", em);
+  }
+
+  // Logo
+  &__logo {
+    @include a.spacing-mixin(margin-right, "48px", em);
+
+    width: 7.625em;
+    height: 2.75em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: var(--logo-image);
+  }
+
+  /// Menu Navigation
+  &__menu {
+    /// Spacing flex more :D
+    flex: 1;
+
+    /// Tablets, Small Laptops
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      display: none;
+    }
+
+    /// Navigation Items
+    &__navigation {
+      @include l.flex(center);
+      list-style-type: none;
+      color: a.theme-color(section-color);
+      @apply text-t-m;
+    }
+
+    &__navigation__li-items {
+      ///Adding Hover states :)
+      color: a.theme-color(navigation);
+      /// Hover :)
+      --interactive-bg-hover: null;
+      --interactive-color-hover: #{a.$color-primary};
+      --interactive-relative-hover: 3;
+      /// Active
+      --interactive-bg-active: null;
+      --interactive-color-active: #{a.$color-primary};
+      --interactive-relative-active: 9;
+      /// Focus
+      --interactive-bg-focus-visible: null;
+      --interactive-color-focus-visible: #{a.$grey-600};
+      --interactive-relative-focus-visible: 0.1;
+      --interactive-transition-focus-visible: 200ms;
+      --interactive-use-hsl-focus-visible: true;
+      @include a.interactive-states("&");
+    }
+  }
+
+  /// Button Sign up Sign in
+  &__theme-btn-access {
+    /// Added this to align with same height
+    @include l.flex(center);
+
+    /// Tablets & Smaller laptops
+    @include l.container-query(
+      header,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      flex: 1;
+      justify-content: flex-end;
+      @include a.spacing-mixin(padding-right, "sm", em);
+    }
+
+    /// Mobile devices
+    @include l.container-query(
+      header,
+      0,
+      map-get($map: a.$breakpoints, $key: "small")
+    ) {
+      padding-right: 0;
+    }
+
+    /// Adding some padding to span element
+    &__text-span {
+      @include a.spacing-mixin(padding-right, "sm", em);
+      color: a.theme-color(forms);
+      /// TEST HERE
+      @apply text-t-m font-bold;
+
+      /// Remove the spacing to mobile link, because the text Dark-mode is out of space
+      @include l.container-query(
+        header,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        display: none;
+      }
+    }
+
+    /// Some padding Dark-mode switch
+    /// Magic Number rofl!
+    &__toggle {
+      @include a.spacing-mixin(padding-left, "sm", em);
+      line-height: 1.4em;
+    }
+
+    /// Theme Switcher Padding
+    &__btn-sign-in-up {
+      /// Some hack, took the slider distance (Theme switcher) + Padding to Sign in Button
+      /// From the Switch and got 76ox
+      margin-left: 1.875em;
+
+      @include a.link-nav-animation(a.$color-white, 0, 400ms, a.$color-primary);
+      /// Tablets, Small Laptops
+
+      @include l.container-query(
+        header,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        display: none;
+      }
+    }
+
+    /// Mobile Menu Link
+    &__bars {
+      height: 2.5em;
+      @include a.spacing-mixin(width, "30px", em);
+      text-align: center;
+      padding: 0.75em;
+      display: none;
+      cursor: pointer;
+
+      /// Show the mobile link
+      @include l.container-query(
+        $_container-name-header,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        padding-left: 15%;
+        display: block;
+      }
+
+      /// Remove the spacing to mobile link, because the text Dark-mode is out of space
+      @include l.container-query(
+        $_container-name-header,
+        0,
+        map-get($map: a.$breakpoints, $key: "small")
+      ) {
+        @include a.spacing-mixin(padding-left, "sm", em);
+        @include a.spacing-mixin(padding-right, "30px", em);
+      }
+    }
+
+    &__bars__icon {
+      color: a.$grey-770;
+    }
+  }
+}
+
+/// Hero section CSS code
+.hero-section {
+  /// Local vars ohyeaa :D x2
+  $max-colums: 2;
+  $max-rows: 4;
+  $hero-max-width: 31.875rem;
+
+  /// Creating Grid
+  @include l.grid-row-colum(
+    map-get($map: a.$display-type, $key: "grid"),
+    a.create-list(auto, auto),
+    a.create-list(auto, 2fr, auto),
+    $max-rows
+  );
+
+  & {
+    /// Added top padding desktop, the padding starts from the image
+    @include a.spacing-mixin(padding-top, "150px", em);
+
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      @include a.spacing-mixin(padding-top, "150px", rem);
+    }
+
+    /// Mobile Phones :)
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      @include a.spacing-mixin(padding-top, "38px", em);
+    }
+  }
+
+  /// Main heading for hero-section
+  &__heading {
+    @include l.grid-position(1, 1, 1, 1);
+
+    & {
+      /// Some font settings for h1
+      color: a.theme-color(display-headings);
+      @apply text-d-4 font-ExtraBold;
+      @include a.spacing-mixin(padding, "48px", rem, "md");
+
+      /// Tablet mode :)
+      @include l.container-query(
+        $_container-name-header,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        @include l.grid-position(1, 3, 1, 1);
+        padding-top: 0;
+
+        @include a.spacing-mixin(padding-bottom, "30px", rem);
+        text-align: center;
+        @apply text-d-7;
+        max-width: 75%;
+        margin: 0 auto;
+      }
+
+      /// Mobile Phones :)
+      @include l.container-query(
+        $_container-name-header,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        @apply text-d-8;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  /// Some descriptive text for the hero section
+  &__text-description {
+    @include l.grid-position(1, 1, 2, 2);
+    // Setting some Max width stuff
+    max-width: $hero-max-width;
+    color: a.theme-color(forms);
+    @apply text-t-l font-Regular;
+    @include a.spacing-mixin(padding-bottom, "40px", rem);
+
+    /// Tablet mode :)
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      @include a.spacing-mixin(padding, "90px", em, "40px");
+    }
+
+    /// Mobile Phones :)
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      @include l.grid-position(1, 3, 2, 2);
+      padding-top: 0;
+      @include a.spacing-mixin(padding-bottom, "40px", rem);
+      text-align: center;
+      max-width: map-get($map: a.$content-width-percentage, $key: "full-width");
+    }
+  }
+
+  /// Apps links for the hero-section
+  &__apps-links {
+    @include l.grid-position(1, 1, 3, 3);
+    display: map-get($map: a.$display-type, $key: "flex");
+    @include a.spacing-mixin(gap, "md", em);
+
+    /// Tablets & Smaller laptops
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      @include a.spacing-mixin(gap, "sm", em);
+    }
+
+    /// Mobile Phones :)
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      @include l.grid-position(1, 3, 3, 3);
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  /// Discover more...
+  &__discover-more {
+    @include l.grid-position(1, 1, 4, 4);
+    display: map-get($map: a.$display-type, $key: "flex");
+
+    /// Paddings and positions
+    padding-top: 13.4375em;
+    padding-bottom: 3.75em;
+    position: relative;
+    ///  @apply bg-blue-500 text-white py-2 px-4 rounded;
+
+    /// Color and font
+    @apply text-t-s font-Regular;
+    color: a.theme-color(forms);
+
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      @include a.spacing-mixin(padding, "40px", rem, "48px");
+    }
+
+    /// Mobile Devices
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      @include l.grid-position(1, 3, 4, 4);
+      @include a.spacing-mixin(padding-bottom, "30px", em);
+      justify-content: center;
+    }
+
+    &__link-item {
+      /// Base Color ANimation :D
+      & {
+        /// Adding Shadow
+        @include a.box-shadow(true, a.$shadow-small...);
+
+        /// Adding Hover States
+        --interactive-bg-hover: null;
+        --interactive-bg-active: null;
+        --interactive-color-hover: #{a.$color-primary};
+        --interactive-color-active: #{a.theme-color(forms)};
+        @include a.interactive-states("&");
+
+        /// Setting up Icon :)
+        &__discover-more__icon {
+          --fa-icon-color: #{a.theme-color(icon-color)};
+          --fa-icon-bg-color: #{a.theme-color(icon-bg-color)};
+          @include c.icon-base("\f078", solid, true);
+        }
+
+        /// Text element
+        & span {
+          @include a.spacing-mixin(margin, "sm", em);
+
+          /// Mobile Devices
+          @include l.container-query(
+            $_container-name-header,
+            0,
+            map-get($map: a.$breakpoints, $key: "medium")
+          ) {
+            @include a.spacing-mixin(margin, "20px", em);
+          }
+        }
+      }
+    }
+  }
+
+  /// Mobile Images
+  &__mobile-images {
+    @include l.grid-position(2, 2, 1, 5);
+    position: relative;
+    text-align: center;
+    /// Magic number to make the image wrapper to
+    /// start litle outside our max parent container size
+    margin-right: -7.5em;
+    overflow: hidden;
+
+    max-width: $_grid-max-width;
+    width: $_grid-max-width;
+
+    /// Preparing for Pad/Tablets
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-3")
+    ) {
+      /// This was added to avoid the images be hidden in to right side, now we see them all the time
+      /// even in smaller container size
+      margin-right: -1em;
+    }
+
+    /// Larger desktop screens
+
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      @include l.grid-position(2, 2, 2, 5);
+      max-width: 25.9375em;
+      margin-right: -1em;
+      margin-right: 0 auto;
+    }
+
+    /// Tablets & Smaller laptops
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      display: none;
+    }
+
+    &__image-wrapper {
+      background-color: blueviolet;
+      width: 100%;
+    }
+
+    /// Common CSS for the images
+    &__image-wrapper__iphone-1,
+    &__image-wrapper__iphone-2 {
+      position: absolute;
+    }
+
+    &__image-wrapper__iphone-1 {
+      right: 4.375em;
+      z-index: 250;
+      width: 24.375em;
+
+      @include l.container-query(
+        $_container-name-header,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        width: 15.23375em;
+        right: 0;
+      }
+    }
+
+    &__image-wrapper__iphone-2 {
+      right: 18em;
+      top: 8.5em;
+      z-index: 125;
+      width: 23.5em;
+
+      @include l.container-query(
+        $_container-name-header,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        width: 15.23375em;
+        right: 8.8em;
+        top: 5.2em;
+      }
+    }
+  }
+}
+
+/// =============================================================================
+/// Main Area
+/// =============================================================================
+/// Local variabel :D
+$_container-name-main: main;
+
+/// Global SCSS for Main wrapper and it's children
+.main-wrapper,
+.footer-wrapper {
+  /// Larger desktop screens
+  /// Adding some padding
+  &__company-logos,
+  &__app-features,
+  &__app-how-diw,
+  &__app-description,
+  &__faq__container__faq-header {
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      /// Adding some Padding eh :D
+      padding-left: 1.375em;
+      padding-right: 1.375em;
+      padding-bottom: 0;
+    }
+  }
+
+  /// Background Colors
+  /// Grey
+  & .main-wrapper__app-how-diw,
+  & .main-wrapper__clients-app {
+    background-color: a.theme-color(section-color);
+  }
+
+  /// White
+  & .main-wrapper__app-description,
+  & .main-wrapper__faq,
+  & .main-wrapper__subscribe,
+  & .footer-wrapper,
+  & .main-wrapper__company-logos,
+  & .main-wrapper__app-features {
+    background-color: a.theme-color(bg-color);
+  }
+
+  /// Content Width
+  &__company-logos__container,
+  &__app-features__container,
+  &__app-how-diw__container,
+  &__app-description__container,
+  &__clients-app__container,
+  &__faq__container,
+  &__subscribe__container,
+  &__footer-container {
+    /// Adding Correct Full With for content
+    /// Content Width
+    @include l.content-width(
+      map-get($map: a.$max-content-width, $key: "desktop"),
+      map-get($map: a.$content-width-percentage, $key: "full-width")
+    );
+  }
+
+  /// Flex it!
+  &__app-how-diw__container,
+  &__app-how-diw__container__image-items,
+  &__app-description__container,
+  &__clients-app__container,
+  &__clients-app__container__client-test-card__user-avatar,
+  &__client-test-card,
+  &__faq__container__faq-accordion__container,
+  &__faq__container__faq-accordion__container__title,
+  &__faq__container__faq-contact,
+  &__faq__container__faq-contact__contact-card,
+  &__subscribe__container__wrapper {
+    @include l.flex(flex-start);
+  }
+}
+
+.main-wrapper {
+  /// Activate Container Query Properties for main-wrapper
+  @include l.container-query-wrapper($_container-name-main);
+
+  /// Company Logos
+  &__company-logos__container {
+    /// Lest's flex it and Gap it!
+    @include l.flex(center);
+    @include a.spacing-mixin(gap, "md", em);
+    @include a.spacing-mixin(null, "75px", rem, "110px");
+    justify-content: center;
+    text-align: center;
+
+    /// Mobile Devices
+    @include l.container-query(
+      /// Lets hide all the logo's in mobile mode
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      & {
+        display: none;
+      }
+    }
+
+    /// Tablets smaller laptops
+    @include l.container-query(
+      /// We are hiding some of the logos in smaller tablet mode
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge")
+    ) {
+      #c-l-6,
+      #c-l-5 {
+        display: none;
+      }
+
+      padding-bottom: 3.875em;
+    }
+
+    /// Setting
+    &__image-item {
+      @include l.flex(center);
+      /// Local vars :D for padding
+      $_padding-h: 2.25em;
+      $_padding-w: 1.375em;
+      $_logo-b-r: map-get(
+        $map: a.$border-radius,
+        $key: "r-0-5",
+      );
+
+      /// Including Mixin Component
+      @include a.logo-box($_padding-h, $_padding-w, $_logo-b-r, a.$grey-300);
+      width: 12.25em;
+      @include a.spacing-mixin(height, "100px", em);
+
+      /// Mobile Phones :)
+    }
+
+    &__image-item,
+    img {
+      width: 100%;
+
+      @include l.container-query(
+        $_container-name-header,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+      }
+    }
+  }
+
+  /// App Features
+  &__app-features__container {
+    /// TODO: Below 357 pixel the app features card not displaying correctly :),
+    /// Lest's flex it and Gap it!
+    @include l.flex(flex-start);
+    @include a.spacing-mixin(gap, "md", em);
+    padding-bottom: 7em;
+    gap: 12.75em;
+
+    & h1 {
+      padding-bottom: 1.375rem;
+      color: a.theme-color(display-headings);
+
+      /// Mobile Phones
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        padding-top: 2.875rem;
+      }
+    }
+
+    & p {
+      @include b.font-settings(
+        null,
+        a.$grey-600,
+        map-get($map: a.$font-weight, $key: "Regular")
+      );
+    }
+
+    /// Tablets smaller laptops
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      /// Layout Settings Responsive
+      /// Text and Heading aliment
+      & div &__heading,
+      &__p-text {
+        text-align: center;
+      }
+
+      /// Removing Image
+      &__phone-image {
+        display: none;
+      }
+    }
+
+    /// Adding Responsive
+    /// Padding for header container
+    @include l.container-query(
+      $_container-name-header,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-2")
+    ) {
+      background-color: red;
+    }
+
+    /// Cards Container, holding everything fine and dandy ;)
+    &__app-features-cards {
+      @include l.flex(flex-start);
+      @include a.spacing-mixin(gap, "56px", em);
+      @include a.spacing-mixin(padding-top, "75px", em);
+      max-width: $_grid-max-width;
+      flex-wrap: wrap;
+
+      & h5 {
+        color: a.theme-color(display-headings);
+      }
+
+      /// Tablets smaller laptops
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        /// Layout Settings Responsive
+        & {
+          max-width: 100%;
+        }
+      }
+
+      /// Mobile Phones
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        margin: auto;
+      }
+    }
+
+    /// Card Container in App features
+    &__app-features-cards__card-container {
+      @include l.flex(flex-start, row);
+      flex-wrap: wrap;
+      gap: 1.5625em;
+
+      /// Adding Responsive
+      /// Padding for header container
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        /// Got Inspired fro AI Solution Phind
+        flex-basis: calc(50% - 2em);
+        justify-content: center;
+      }
+
+      /// Mobile Phones
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        /// Got Inspired fro AI Solution Phind
+        flex-basis: calc(100%);
+      }
+    }
+
+    /// Image Beside Card content
+    &__app-features-cards__card-container img {
+      @include a.background-generator(
+        a.theme-color(icon-bg-color-b),
+        map-get($map: a.$border-radius, $key: "r-0-5"),
+        1em,
+        1.25em
+      );
+    }
+
+    /// Card Items in App features
+    &__app-features-cards__card-container__card-item {
+      max-width: 14.25em;
+
+      /// Adding Responsive
+      /// Padding for header container
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        max-width: 70%;
+      }
+
+      /// Mobile Phones
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        width: 100%;
+      }
+    }
+
+    &__app-features-cards__card-container__card-item h5 {
+      padding-bottom: 0.75em;
+    }
+  }
+
+  /// How Does It Works?
+  &__app-how-diw__container {
+    @include a.spacing-mixin(gap, "md", em);
+    @include a.spacing-mixin(null, "73px", rem, "110px");
+    flex-direction: column;
+    align-items: center;
+
+    & p {
+      @include b.font-settings(null, a.theme-color(special-text-a), null);
+      padding-bottom: 4.9375rem;
+    }
+
+    /// Text Centering
+    & p,
+    h4,
+    h1 {
+      text-align: center;
+      max-width: 39.75em;
+      @include a.spacing-mixin(padding-bottom, "sm", em);
+    }
+    & h1 {
+      @include b.font-settings(null, a.theme-color(display-headings), null);
+    }
+    & h4 {
+      color: a.theme-color(display-headings);
+    }
+
+    /// Img Base Size
+    &__image-items {
+      /// Adding some gap
+      @include a.spacing-mixin(gap, "100px", em);
+      /// Setting image height
+      & img {
+        height: 39.375em;
+      }
+
+      /// Spacing
+      @include a.spacing-mixin(padding-bottom, "50px", em);
+    }
+
+    /// Adding some Gap
+
+    /// Tablets, Smaller Laptops
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      & h1 {
+        @include b.font-settings(2.09375rem, null, null);
+      }
+
+      & p,
+      h4 {
+        max-width: 26.5em;
+      }
+
+      /// Setting image height
+      & img {
+        height: 23.625em;
+        width: 100%;
+      }
+
+      & p {
+        @include a.spacing-mixin(padding-bottom, "100px", em);
+        @include b.font-settings(null, a.theme-color(special-text-b), null);
+      }
+    }
+
+    /// Mobile Phones
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      & {
+        @include a.spacing-mixin(null, "73px", rem, "43px");
+      }
+      /// Font Modifications
+      & h1 {
+        @include b.font-settings(
+          1.74375rem,
+          null,
+          map-get($map: a.$font-weight, $key: "ExtraBold")
+        );
+      }
+
+      & h4 {
+        @include b.font-settings(1.35rem, null null);
+      }
+
+      & p {
+        padding-bottom: 3.75em;
+        @include b.font-settings(null, a.theme-color(special-text-b), null);
+      }
+
+      /// Les hide some images
+      & #how-phone-2,
+      #how-phone-3 {
+        display: none;
+      }
+    }
+  }
+
+  /// App Description
+  &__app-description__container {
+    padding-right: 6.26em;
+    padding-left: 6.25em;
+
+    /// Tablets, Smaller Laptops
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      & {
+        display: none;
+      }
+    }
+
+    /// Content Section
+    &__section {
+      /// With's and Paddings
+      width: map-get($map: a.$content-width-percentage, $key: "half-width");
+      position: relative;
+      @include a.spacing-mixin(null, "133px", em, "148px");
+      /// Icon Modification
+      & .fa-circle-check {
+        color: a.$color-primary;
+        padding-bottom: 0.875em;
+        @include a.spacing-mixin(padding-right, "10px", em);
+      }
+
+      /// Image positioning
+      /// Global Image CSS
+      &__balance-image,
+      &__user-image,
+      &__credit-card-image,
+      &__full-users-image {
+        position: absolute;
+      }
+
+      &__balance-image {
+        left: 50%;
+        transform: translateX(-55%);
+      }
+
+      &__user-image {
+        right: 5%;
+        bottom: -108%;
+      }
+
+      &__credit-card-image {
+        top: 86%;
+        right: 5.5em;
+        object-fit: cover;
+
+        /// Our first Shadow here :);
+        @include a.box-shadow(
+          true,
+          -#{2.75em,
+          } 1.625em 1.25em 0em #060312 0.34
+        );
+      }
+
+      /// Last Text element
+      &__lastp-p-element {
+        @include a.spacing-mixin(padding-bottom, "43px", em);
+      }
+
+      &__text-wrapper {
+        /// Magic Number rofl, we are trying to get the same result as Figma
+        max-width: 28em;
+      }
+
+      &__text-wrapper h2 {
+        padding-bottom: 2.8125rem;
+        padding-top: 4rem;
+        color: a.theme-color(display-headings);
+      }
+
+      /// Small modification for longer text wrapper :D
+      &__text-wrapper--longer {
+        /// Magic Number rofl, we are trying to get the same result as Figma
+        max-width: 32.875em;
+        @include a.spacing-mixin(padding-left, "sm", em);
+      }
+
+      &__text-wrapper--longer h2 {
+        padding-bottom: 2.8125rem;
+        padding-top: 1.5rem;
+      }
+
+      /// Adding some flex modification
+      &__text-wrapper--flex {
+        @include l.flex(flex-start);
+      }
+
+      &__text-wrapper__flex-box {
+        width: 50%;
+      }
+
+      &__text-wrapper__flex-box img {
+        @include a.background-generator(
+          a.theme-color(icon-bg-color-b),
+          map-get($map: a.$border-radius, $key: "r-0-5"),
+          1em,
+          1.25em
+        );
+      }
+
+      &__text-wrapper__flex-box p {
+        @include a.spacing-mixin(null, "md", em, "46px");
+        color: a.theme-color(forms);
+        @apply text-t-m font-Regular;
+      }
+    }
+  }
+
+  /// Clients Are Loving Our App
+  &__clients-app__container {
+    /// Basic Settings for Client loving our app section
+    /// Instead of settings paddings top and bottom as I did above
+    /// I decided to add an height and center the content, this is because
+    /// we are not doing responsive design on this section
+
+    @include a.spacing-mixin(null, "100px", em, "100px");
+    @include a.spacing-mixin(gap, "md", em);
+
+    /// Tablets, Smaller Laptops
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      & {
+        display: none;
+      }
+    }
+
+    /// Mobile Phones
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      & {
+        display: none;
+      }
+    }
+
+    /// Clients header, setting up font, no heading from Figma
+    &__client-intro {
+      & p {
+        color: a.theme-color(display-headings);
+        @apply text-h-1 font-ExtraBold;
+        padding-right: 2.625rem;
+      }
+    }
+
+    /// Client Testimonials card
+    &__client-test-card {
+      /// Setting max dimension for the cards
+      @include a.spacing-mixin(max-width, "416px", em);
+      max-height: 21.875em;
+
+      @include a.background-generator(
+        a.theme-color(cards-color-a),
+        map-get($map: a.$border-radius, $key: "r-0-5"),
+        1.5em,
+        2.6875em,
+        relative
+      );
+      @include a.spacing-mixin(padding-bottom, "md", em);
+      /// Adding Shadow
+      @include a.box-shadow(
+        false,
+        (0em 0.275em 0.75em null #131022 0.06),
+        (0em 0.125em 0.4em null #131022 0.03)
+      );
+
+      & p {
+        color: a.theme-color(forms);
+        @apply text-t-l font-Regular;
+      }
+
+      /// Quotas Icon
+      /// I made the choice to use image of icon because the free icon from
+      /// font awesome was so different.
+      &__icon {
+        /// Giving the image background and color
+        @include a.background-generator(
+          a.$color-primary,
+          map-get($map: a.$border-radius, $key: "r-0-5"),
+          1.375em,
+          1.375em
+        );
+        /// Giving color and some overriding bottom padding, wanted to use !important for the first time hehe
+        color: a.$color-white;
+        @include a.spacing-mixin(padding, "14px", em);
+        /// Adding Shadow
+        @include a.box-shadow(false, (0em 0.5em 1.125em -0.5em #6366f1 0.9));
+
+        /// Positioning
+        position: absolute;
+        top: -1.7em;
+      }
+
+      /// Adding Star review styling :)
+      /// Litle special here :), we used first i and last i to give it padding ;)
+      & i:last-of-type,
+      i:first-of-type {
+        @include a.spacing-mixin(null, "10px", em, "lg");
+      }
+
+      & i.fa-star {
+        color: a.$system-warning;
+      }
+
+      & i.fa-regular {
+        color: a.$grey-500;
+      }
+
+      /// Text Padding
+      & p:first-of-type {
+        @include a.spacing-mixin(padding-bottom, "md", em);
+      }
+
+      /// User Avatar
+      &__user-avatar {
+        height: 48px;
+        gap: 1em;
+        align-items: center;
+      }
+
+      /// Targeting P tag to remove padding
+      &__user-avatar div:first-of-type p {
+        padding-bottom: 0;
+        @apply text-t-s font-Regular text-grey-600;
+      }
+
+      &__user-avatar div:first-of-type p:first-child {
+        padding-bottom: 0.3em;
+        color: a.theme-color(display-headings);
+        @apply text-t-m font-Bold;
+      }
+    }
+  }
+
+  /// Any Questions Check out the FAQ
+  &__faq__container {
+    /// Local Vars
+    $_faq-grid-max-rows: 4;
+
+    /// Setting some PAdding
+    padding-top: 7.625em;
+    padding-bottom: 6.8125em;
+
+    /// Re arranging grid för desktop
+    @include l.grid-row-colum(
+      map-get($map: a.$display-type, $key: "grid"),
+      /// Colum here giddy
+      a.create-list(34.5%, auto),
+      /// Row here giddy
+      a.create-list(auto),
+      $_faq-grid-max-rows
+    );
+    @include a.spacing-mixin(row-gap, "40px", em);
+    column-gap: 8.375em;
+
+    ///----------- Responsive START -----------
+    /// Mobile Devices
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      /// Lets create the grid! for Desktop
+      $_faq-grid-max-rows: 2;
+
+      /// Setting some PAdding
+      @include a.spacing-mixin(null, "63px", em, "lg");
+
+      /// Changing Grid
+      $_faq-grid-max-rows: 3;
+      @include l.grid-row-colum(
+        map-get($map: a.$display-type, $key: "grid"),
+        /// Colum here giddy
+        a.create-list(auto),
+        /// Row here giddy
+        a.create-list(auto),
+        $_faq-grid-max-rows
+      );
+    }
+
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      padding-top: 3.25em;
+      padding-bottom: 2.625em;
+    }
+
+    ///----------- Responsive END -----------
+
+    /// Now I will try to use Mobile first Approach
+    /// Starting with container queries
+    /// Header with some text
+    &__faq-header {
+      margin: 0 auto;
+      @include l.grid-position(1, 1, 1, 1);
+
+      & h2 {
+        padding-bottom: 2.875rem;
+        color: a.theme-color(display-headings);
+      }
+      & p {
+        color: a.theme-color(forms);
+      }
+
+      ///----------- Responsive START -----------
+      /// Mobile devices
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        & {
+          padding-top: 3.25em;
+        }
+
+        & p:first-of-type {
+          padding-top: 2.125em;
+          padding-bottom: 3.5625em;
+        }
+        & h2 {
+          font-size: 1.54375rem;
+        }
+      }
+
+      /// Tablets & smaller laptops
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        & {
+          @include l.grid-position(1, 1, 1, 1);
+          padding-top: 3.75em;
+          text-align: center;
+          /// Apply Max width
+          @include a.spacing-mixin(max-width, "416px", em);
+        }
+
+        & p:first-of-type {
+          padding-top: 3rem;
+          padding-bottom: 3rem;
+        }
+      }
+
+      ///----------- Responsive END -----------
+    }
+
+    /// Accordion FAQ
+    &__faq-accordion {
+      ///----------- Responsive START -----------
+      /// Mobile Devices
+      /// We are setting container padding parent container
+      /// for FAQ
+      @include l.grid-position(2, 2, 1, 4);
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        & {
+          padding: 0 0.8125em 0 0.8125em;
+        }
+      }
+
+      /// Tablets & smaller laptops
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        /// Adding some padding to left and right side in mobile version
+        @include l.grid-position(1, 1, 2, 2);
+      }
+
+      /// Tablets & smaller laptops
+      @include l.container-query(
+        $_container-name-main,
+        map-get($map: a.$breakpoints, $key: "medium"),
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        & {
+          padding: 1em;
+        }
+      }
+
+      ///----------- Responsive END -----------
+    }
+
+    &__faq-accordion__container {
+      ///----------- Starting CSS -----------
+      flex-direction: column;
+      @apply drop-shadow-md;
+
+      /// When Container is open we want an dark border in
+      /// dark mode
+      &--active {
+        border: 1px solid a.theme-color(cards-color-border-active);
+      }
+
+      ///----------- Global CSS START -----------
+      &__title {
+        /// Flex Settings
+
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      &__title p {
+        /// Font Settings Global
+        @apply text-t-m font-SemiBold;
+        color: a.theme-color(forms);
+      }
+
+      &__title p:first-of-type,
+      &__content {
+        /// Adding Padding to the container for faq
+        @include a.spacing-mixin(padding, "sm", em);
+      }
+
+      &__title p:last-of-type {
+        /// Adding Padding to the container for faq
+        @include a.spacing-mixin(padding-right, "md", em);
+        @include a.spacing-mixin(padding-left, "md", em);
+      }
+
+      &__content {
+        /// Setting Content too 100%
+        width: 100%;
+        @include a.spacing-mixin(padding-bottom, "md", em);
+        padding-top: 0;
+      }
+
+      /// Adding Space between Paragrafs in mobile view
+      &__content p {
+        /// Font Settings
+        @apply text-t-s;
+      }
+
+      &__content p:last-child {
+        /// Adding some Padding in Content between Paragraph
+        @include a.spacing-mixin(padding-top, "28px", em);
+      }
+
+      &__icon {
+        /// Base Setting for the Icon
+        --fa-icon-color: #{a.theme-color(icon-color)};
+        --fa-icon-bg-color: #{a.theme-color(icon-bg-color)};
+        @include c.icon-base("\f078", solid, true);
+
+        /// Adding Hover States
+        @include a.interactive-states("&");
+      }
+
+      &__icon--active {
+        /// Base Setting for the Icon
+        --fa-icon-bg-color: #{a.$color-primary};
+        --fa-icon-color: #{a.$color-white};
+
+        /// Base Setting for the Icon
+        @include c.icon-base("\f077", solid, true);
+
+        /// Adding Shadow
+        @include a.box-shadow(false, (0em -0.5em 1.125em -0.5em #6366f1 0.9));
+      }
+
+      ///----------- Global CSS END -----------
+
+      ///----------- Responsive START -----------
+      /// Mobile Devices
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        & {
+          /// Borders
+          border-top: 0.125em solid a.theme-color(cards-color-border);
+          border-left: 0.125em solid a.theme-color(cards-color-border);
+          border-right: 0.125em solid a.theme-color(cards-color-border);
+        }
+
+        &--border-radius {
+          border-radius: map-get($map: a.$border-radius, $key: "r-0-5")
+            map-get($map: a.$border-radius, $key: "r-0-5") 0 0;
+        }
+
+        &__title {
+          padding-bottom: 0;
+        }
+        &__title p {
+          color: a.theme-color(display-headings);
+        }
+
+        &__title--inner-shadow {
+          /// Add Inner Shadow
+          /// TODO: ISSUE not working in dark-mode, need Javascript for faster refactoring
+          @include a.box-shadow(false, (inset 0 -0.0625em 0 0 #e2e5f1));
+        }
+
+        &__title--border-bottom {
+          border-bottom: 0.125em solid a.theme-color(cards-color-border);
+        }
+
+        /// Adding Space between Paragrafs in mobile view
+        &__content {
+          @include a.spacing-mixin(padding-top, "md", em);
+        }
+        &__content p {
+          color: a.theme-color(forms);
+        }
+      }
+
+      /// Tablets & smaller laptops
+      /// This one starts from medium without any max container with
+      /// Basically we could just put all code here if we don't need some
+      /// global css
+      @include l.container-query(
+        $_container-name-main,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        & {
+          @include a.spacing-mixin(gap, "md", em);
+          /// Adding some Paddings
+          @include a.spacing-mixin(null, "sm", em, "sm");
+          border-radius: map-get($map: a.$border-radius, $key: "r-0-5");
+          background-color: a.theme-color(cards-color-a);
+
+          /// Adding Shadow
+          @include a.box-shadow(
+            false,
+            (0 0.275em 0.75em 0em #131022 0.06),
+            (0 0.125em 0.4em 0em #131022 0.03)
+          );
+
+          @include a.spacing-mixin(margin-bottom, "sm", em);
+        }
+
+        /// Setting up fonts and color
+        &__content p {
+          color: a.theme-color(forms);
+        }
+
+        &__title p {
+          color: a.theme-color(display-headings);
+        }
+      }
+
+      ///----------- Responsive END -----------
+    }
+
+    /// FAQ Contact Section
+    &__faq-contact {
+      ///----------- Global CSS START -----------
+      @include l.grid-position(1, 1, 2, 2);
+      width: 100%;
+      gap: 1.125em;
+
+      /// Button Contact us now
+      &__contact-us-now-btn {
+        display: none;
+      }
+      &__contact-card p {
+        color: a.theme-color(forms);
+        @apply text-t-s font-Regular;
+      }
+
+      /// Contact Card
+      &__contact-card {
+        flex-direction: column;
+        @include a.spacing-mixin(padding, "md", em);
+        gap: 1.275em;
+        border: 1px solid a.$grey-300;
+        border-radius: map-get($map: a.$border-radius, $key: "r-0-5");
+
+        & a {
+          /// Changing Font
+          @apply text-t-s font-SemiBold;
+          @include a.spacing-mixin(padding-bottom, "md", em);
+        }
+
+        /// Styling the link and adding some spacing
+        &--color-primary {
+          color: a.$color-primary;
+          @include a.is-base-links(
+            a.$color-primary,
+            a.$color-primary,
+            a.$grey-600
+          );
+        }
+
+        & i {
+          margin-left: 13px;
+        }
+
+        /// Green link
+        &--color-green {
+          color: a.$system-success;
+          @include a.is-base-links(
+            a.$system-success,
+            a.$system-success,
+            a.$grey-600
+          );
+        }
+      }
+
+      ///----------- Global CSS END -----------
+
+      ///----------- Responsive START -----------
+      /// Mobile Devices
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "medium")
+      ) {
+        & {
+          /// Adding Paddings
+          padding-top: 3.625em;
+          text-align: center;
+          justify-content: center;
+
+          /// Hide Contact Card
+          &__contact-card {
+            display: none;
+          }
+        }
+
+        &__contact-us-now-btn--primary {
+          /// Show the button
+          display: block;
+          /// Changing Font
+          color: a.$color-white;
+          @apply text-t-s font-SemiBold;
+        }
+      }
+
+      /// Tablets Smaller laptops
+      @include l.container-query(
+        $_container-name-main,
+        0,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        & {
+          @include l.grid-position(1, 1, 3, 3);
+          padding: 1em;
+        }
+
+        /// Contact Card
+        &__contact-card {
+          flex: 1;
+          @include a.spacing-mixin(padding, "40px", em);
+          gap: 1.875em;
+        }
+      }
+
+      /// From Desktop to Unknown Size
+      @include l.container-query(
+        $_container-name-main,
+        map-get($map: a.$breakpoints, $key: "xlarge-1")
+      ) {
+        & {
+          @include a.spacing-mixin(column-gap, "md", em);
+        }
+      }
+
+      ///----------- Responsive END -----------
+    }
+  }
+
+  /// Subscribe to our newsletter
+  &__subscribe__container {
+    ///----------- Global CSS START -----------
+    margin: auto;
+    padding: 0;
+
+    ///----------- Global CSS END -----------
+    ///----------- Responsive START -----------
+    @include l.container-query(
+      $_container-name-main,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      padding: 0 1em 0 1em;
+    }
+    @include l.container-query(
+      $_container-name-main,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      padding: 0;
+    }
+    ///----------- Responsive END -----------
+  }
+  &__subscribe__container__wrapper {
+    margin: auto;
+    border: 1px solid transparent;
+    width: 100%;
+    border-radius: map-get($map: a.$border-radius, $key: "r-0-5");
+    background-color: a.theme-color(subscription-section);
+    ///----------- Global CSS START -----------
+    & h4 {
+      color: a.theme-color(display-headings);
+    }
+
+    &__flex {
+      width: 100%;
+      align-items: center;
+    }
+
+    &__flex--form {
+      position: relative;
+      align-items: stretch;
+      justify-content: center;
+      /// Styling Form
+      & input,
+      button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        @apply text-t-s;
+      }
+      & input {
+        width: 100%;
+        flex-grow: 1;
+        padding: 0.5em 1em;
+        font-size: inherit;
+        border: 1px solid a.theme-color(form-input-border-color);
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        color: a.$grey-500;
+        background-color: a.theme-color(form-input-color);
+        padding-left: 15%;
+        font-weight: map-get($map: a.$font-weight, $key: "Regular");
+      }
+      & button {
+        font-weight: map-get($map: a.$font-weight, $key: "SemiBold");
+      }
+      & i {
+        position: absolute;
+        left: 10%;
+        top: 50%;
+        transform: translateY(-50%);
+        color: a.$grey-500;
+      }
+    }
+
+    ///----------- Global CSS END -----------
+
+    ///----------- Responsive START -----------
+    /// Mobile Devices
+    @include l.container-query(
+      $_container-name-main,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      & {
+        row-gap: 1em;
+        flex-direction: column;
+        justify-content: center;
+        padding-bottom: 2.25em;
+      }
+
+      &__flex {
+        @include a.spacing-mixin(padding, "sm", em);
+      }
+      &__flex h4 {
+        @include a.spacing-mixin(padding-left, "20px", em);
+      }
+      &__flex h4:last-child {
+        display: none;
+      }
+      & input {
+        background-color: white;
+      }
+      &__flex--display-flex {
+        display: flex;
+      }
+    }
+
+    /// Tablet and smaller laptops
+    @include l.container-query(
+      $_container-name-main,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      & {
+        justify-content: center;
+        align-items: center;
+        padding: 4.5em 1.5625em 4.5em 1.5625em;
+      }
+
+      &__flex--display-flex {
+        display: flex;
+        justify-content: center;
+      }
+
+      &__flex--form {
+        & i {
+          left: 5%;
+        }
+      }
+      & input {
+        background-color: white;
+      }
+      &__flex h4 {
+        @include a.spacing-mixin(padding-left, "20px", em);
+      }
+      &__flex h4:last-child {
+        display: none;
+      }
+    }
+
+    /// Desktops and beyond the universe of Starcraft
+    @include l.container-query(
+      $_container-name-main,
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      & {
+        padding: 4.5em 7em 4.5em 7em;
+      }
+
+      &__flex--display-flex {
+        flex: 1.4;
+      }
+
+      &__flex h4 {
+        display: none;
+      }
+      &__flex h4:last-child {
+        display: block;
+      }
+      &__flex--form {
+        flex: 1.1;
+        padding-left: 4.625em;
+        & i {
+          left: 18%;
+        }
+        & button {
+          padding-left: 2.65em;
+          padding-right: 2.65em;
+        }
+      }
+    }
+
+    ///----------- Responsive END -----------
+  }
+}
+
+/// =============================================================================
+/// Footer Area
+/// =============================================================================
+$_container-name-footer: footer;
+.footer-wrapper {
+  /// Activate Container Query Properties for main-wrapper
+  @include l.container-query-wrapper($_container-name-footer);
+  background-color: a.theme-color(bg-color);
+
+  ///----------- Global CSS START -----------
+
+  /// Duuuhhh only one simple footer eh
+  &__footer-container {
+    text-align: center;
+    @include a.padding-top-bottom(3.5em, 3.5em);
+
+    & p {
+      @apply text-t-s font-Regular text-grey-600;
+    }
+    ///----------- Global CSS END -----------
+    ///----------- Responsive START -----------
+    /// Mobile Devices
+    @include l.container-query(
+      $_container-name-footer,
+      0,
+      map-get($map: a.$breakpoints, $key: "medium")
+    ) {
+      & {
+        @include a.padding-top-bottom(2.1875em, 2.1875em);
+        @include a.padding-left-right(5.375em, 5.375em);
+      }
+    }
+
+    /// Tablet and smaller laptops
+    @include l.container-query(
+      $_container-name-footer,
+      map-get($map: a.$breakpoints, $key: "medium"),
+      map-get($map: a.$breakpoints, $key: "xlarge-1")
+    ) {
+      @include a.padding-top-bottom(2.1875em, 2.1875em);
+    }
+    ///----------- Responsive START -----------
+  }
+}

@@ -10,6 +10,7 @@ const config = {
   bracketSpacing: true,
   arrowParens: 'always',
   endOfLine: 'lf',
+  insertFinalNewline: false,
   jsxSingleQuote: false,
   overrides: [
     {

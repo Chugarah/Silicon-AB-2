@@ -1,13 +1,21 @@
 {
   "$schema": "./tsconfig.schema.json",
   "compilerOptions": {
-
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@assets/*": ["src/assets/*"],
+      "@js/*": ["src/js/*"],
+      "@scss/*": ["src/scss/*"],
+      "@fa-scss/*": ["node_modules/@fortawesome/fontawesome-free/scss/*"],
+      "@fortawesome/*": ["node_modules/@fortawesome/*"],
+      "@fontsource/*": ["node_modules/@fontsource/*"]
+    },
     "jsx": "react-jsx",
     "target": "ES2020",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
@@ -24,7 +32,20 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "useDefineForClassFields": true,
+    "allowImportingTsExtensions": false,
+    "types": ["vite/client"]
   },
-  "include": ["src/**/*", "prettier.config.js", "tanstack.config.js", "eslint.config.js"]
+  "include": [
+    "src/**/*",
+    "*.js",
+    "*.ts",
+    "*.cjs",
+    "*.mjs",
+    "*.jsx",
+    "*.tsx",
+    "vite.config.ts",
+    "src/**/*.d.ts"
+  ]
 }
