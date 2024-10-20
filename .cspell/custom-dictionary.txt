@@ -1,7 +1,9 @@
 # Custom Dictionary Words
 Behaviour
+brotli
 fontawesome
 fontsource
 fortawesome
 relfative
+svgr
 xlarge
