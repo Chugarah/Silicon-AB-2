@@ -35,7 +35,7 @@
     "skipLibCheck": true,
     "useDefineForClassFields": true,
     "allowImportingTsExtensions": false,
-    "types": ["vite/client"]
+    "types": ["bun-types", "vite/client"]
   },
   "include": [
     "src/**/*",
@@ -45,6 +45,7 @@
     "*.mjs",
     "*.jsx",
     "*.tsx",
+    "*.swcrc",
     "vite.config.ts",
     "src/**/*.d.ts"
   ]

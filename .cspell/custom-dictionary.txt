@@ -1,9 +1,13 @@
 # Custom Dictionary Words
 Behaviour
 brotli
+bunx
+esmodules
 fontawesome
 fontsource
 fortawesome
+outdir
 relfative
 svgr
+whatwg
 xlarge
